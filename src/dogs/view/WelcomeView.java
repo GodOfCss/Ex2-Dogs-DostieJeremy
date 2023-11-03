@@ -105,6 +105,7 @@ public class WelcomeView extends JFrame implements IView, ActionListener {   // 
 			case ADD_DOG:
 				addDog();
 				break;
+				
 			case LIST_DOGS:
 				listDogs();
 				break;
@@ -117,6 +118,7 @@ public class WelcomeView extends JFrame implements IView, ActionListener {   // 
 
 	private void addDog() {
 		System.out.println("ajouter un chien");
+		this.controller.wantToCreateDog();
 	}
 	
 	private void listDogs() {

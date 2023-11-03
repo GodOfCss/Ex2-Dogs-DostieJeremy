@@ -1,5 +1,7 @@
 package dogs;
 
+import dogs.controller.DogController;
+import dogs.controller.IDogController;
 import dogs.controller.IWelcomeController;
 import dogs.controller.WelcomeController;
 

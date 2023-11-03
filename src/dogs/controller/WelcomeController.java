@@ -10,4 +10,10 @@ public class WelcomeController implements IWelcomeController {
 		IView welcomeView = new WelcomeView(this);
 		welcomeView.display();
 	}
+
+	@Override
+	public void wantToCreateDog() {
+		IDogController dogController = new DogController();
+		dogController.goToCreate();
+	}
 }
