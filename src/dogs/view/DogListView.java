@@ -6,6 +6,7 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,25 +19,20 @@ import dogs.controller.IDogController;
 import dogs.dto.DogCharacteristics;
 
 
-public class DogCreateView extends JDialog implements IView, ActionListener {
+public class DogListView extends JDialog implements IView, ActionListener {
 	
-	private static final String VIEW_TITLE = "Inscription d'un chien";
-	private static final String NAME_LABEL = "Nom:";
-	private static final String RACE_LABEL = "Race:";
-	private static final String INSCRIPTION_LABEL = "Inscrire";
-	private static final String INSCRIPTION_ACTION = "INSCRIPTION";
+	private static final String VIEW_TITLE = "Listes des chiens";
+	private static final String NAME_LABEL = "NOM";
+	private static final String RACE_LABEL = "RACE";
+	private static final String ID_LABEL = "ID";
 	
-	private static final int PANEL_COLUMNS = 1;
-	private static final int PANEL_ROWS = 2;
-	
+	private static final String CLOSE_ACTION = "Close list tab";
 
-	private JTextField name = new JTextField(15);
-	private JTextField breed = new JTextField(20);
 
 	private IDogController controller;
 
 
-	public DogCreateView(IDogController controller) {
+	public DogListView(IDogController controller) {
 		super();
 		
 		this.controller = controller;
@@ -57,33 +53,45 @@ public class DogCreateView extends JDialog implements IView, ActionListener {
 	}
 
 	private void setUpComponents() {
-		this.setUpInputDataPanel();
-		this.setUpActionPanel();		
+		this.setUpListPanel();
+		this.setUpButtonPanel();		
 	}
 
-	private void setUpInputDataPanel() {
+	private void setUpListPanel() {
 		// container interm�diaire JPanel qui contient les �tiquettes (JLabel) et les zones de textes (JTextField)
-		JPanel dogCreationPanel = new JPanel();
-		this.add(dogCreationPanel, BorderLayout.CENTER);
+		JPanel dogListPanel = new JPanel();
+		this.add(dogListPanel, BorderLayout.CENTER);
+
 		// utiliser un GridLayout comme LayoutManager
-		dogCreationPanel.setLayout(new GridLayout(PANEL_ROWS, PANEL_COLUMNS));
-		//Ajouts des texts fields
-		addTextField(dogCreationPanel, NAME_LABEL, this.name);
-		addTextField(dogCreationPanel, RACE_LABEL, this.breed);
+		int amountOfDogs = controller.getAmountOfDogs();
+		dogListPanel.setLayout(new GridLayout(amountOfDogs,2));
+		
+		addTextField(dogListPanel, ID_LABEL);
+		addTextField(dogListPanel, NAME_LABEL);
+		addTextField(dogListPanel, RACE_LABEL);
+		
+		List<DogCharacteristics> dogs = controller.getDogsCharacteristics();
+		
+		for(DogCharacteristics dog : dogs) {
+			
+			addTextField(dogListPanel, ID_LABEL);
+			addTextField(dogListPanel, dog.NAME);
+			addTextField(dogListPanel, dog.BREED);
+		}
 	}
 	
-	private void addTextField(JPanel panel, String labelText, JTextField textField) {
+	private void setUpButtonPanel() {
+		JPanel buttonPanel = new JPanel();
+		this.add(buttonPanel, BorderLayout.SOUTH);
+		
+		addButton(buttonPanel, "OK", CLOSE_ACTION);
+	}
+	
+	private void addTextField(JPanel panel, String labelText) {
 		// Pour ajouter successivement une �tiquette et une zone de texte au panel
 		JLabel label = new JLabel();
 		label.setText(labelText);
 		panel.add(label);
-		panel.add(textField);
-	}
-
-	private void setUpActionPanel() {
-		JPanel inscriptionPanel = new JPanel();
-		this.add(inscriptionPanel, BorderLayout.SOUTH);
-		addButton(inscriptionPanel, INSCRIPTION_LABEL, INSCRIPTION_ACTION);
 	}
 
 	// m�me m�thode que dans WelcomeView
@@ -97,18 +105,16 @@ public class DogCreateView extends JDialog implements IView, ActionListener {
 		actionPanel.add(button);
 	}
 	
-	private void createDog() {
-		controller.addDog(new DogCharacteristics(name.getText(),breed.getText()));
-		JOptionPane thankMessage = new JOptionPane();
-		JOptionPane.showMessageDialog(this,"Merci d'avoir inscrit votre chien!");     
+	private void close() {
+		this.setVisible(false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		// intercepter l'�v�nement sur le bouton Inscrire et appeler la m�thode createDog
 		switch(event.getActionCommand()) {
-			case INSCRIPTION_ACTION:
-				createDog();
+			case CLOSE_ACTION:
+				close();
 				break;
 			default:
 				break;

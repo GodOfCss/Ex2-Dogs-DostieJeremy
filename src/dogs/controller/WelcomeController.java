@@ -4,7 +4,12 @@ import dogs.view.IView;
 import dogs.view.WelcomeView;
 
 public class WelcomeController implements IWelcomeController {
-
+	
+	private IDogController dogController;
+	
+	public WelcomeController(IDogController dogController) {
+		this.dogController = dogController;
+	}
 
 	public void startApplication() {
 		IView welcomeView = new WelcomeView(this);
@@ -13,7 +18,12 @@ public class WelcomeController implements IWelcomeController {
 
 	@Override
 	public void wantToCreateDog() {
-		IDogController dogController = new DogController();
 		dogController.goToCreate();
+	}
+
+	@Override
+	public void wantToListDogs() {
+		dogController.goToList();
+		
 	}
 }
