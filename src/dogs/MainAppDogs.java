@@ -4,6 +4,8 @@ import dogs.controller.DogController;
 import dogs.controller.IDogController;
 import dogs.controller.IWelcomeController;
 import dogs.controller.WelcomeController;
+import dogs.repository.DogMemoryRepository;
+import dogs.repository.IDogRepository;
 
 public class MainAppDogs {
 
@@ -17,7 +19,14 @@ public class MainAppDogs {
 	}
 	
 	private void createControllers() {
-		IWelcomeController appController = new WelcomeController();
+		IDogRepository dogs = new DogMemoryRepository();
+		DataSeeder data = new DataSeeder();
+		data.createDogList(dogs, 5);
+		
+		IDogController dogController = new DogController(dogs);
+		IWelcomeController appController = new WelcomeController(dogController);
+		
+		
 		appController.startApplication();
 	}
 

@@ -123,6 +123,7 @@ public class WelcomeView extends JFrame implements IView, ActionListener {   // 
 	
 	private void listDogs() {
 		System.out.println("Faire la liste des chiens");
+		this.controller.wantToListDogs();
 	}
 
 
